@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Test</title>
+        <title>LeafLet_Turf</title>
 
         <!-- leaflet css  -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -65,8 +65,8 @@
     });
 
     var uerjPoints = L.geoJSON(data_points); //JSON simples
-    uerj.addTo(map);
-    uerjPoints.addTo(map);
+    // uerj.addTo(map);
+    // uerjPoints.addTo(map);
 
     // Criação da legenda de seleção
     baseLayer = {
@@ -108,6 +108,81 @@
     var bearing1 = 25;
     var bearing2 = 47;
     var arc = turf.lineArc(center, radius, bearing1, bearing2);
-    L.geoJSON(center).addTo(map)
-    L.geoJSON(arc).addTo(map)
+    // L.geoJSON(center).addTo(map)
+    // L.geoJSON(arc).addTo(map)
+
+    //lineChunk
+    var line = turf.lineString([[-43.24120044708252, -22.913574812462297], [-43.23819637298584, -22.90871265443263], [-43.23051452636719, -22.907684858864418]]);
+    var chunk = turf.lineChunk(line, 15, {units: 'miles'});
+    // L.geoJSON(chunk).addTo(map)
+
+    //lineIntersect
+    var line1 = turf.lineString([[-43.23819637298584, -22.90827781879694], [-43.23463439941406, -22.913891044342787]]);
+    var line2 = turf.lineString([[-43.24085712432861, -22.912428465711024], [-43.23261737823486, -22.90958232152021]]);
+    var intersects = turf.lineIntersect(line1, line2);
+    // L.geoJSON(line1).addTo(map)
+    // L.geoJSON(line2).addTo(map)
+    // L.geoJSON(intersects).addTo(map)
+
+    //lineOverlap
+    var line1 = turf.lineString([
+        [-43.23896884918213, -22.909424200646487],
+        [-43.23750972747802, -22.911123990374257],
+        [-43.23424816131592, -22.911282109265443],
+        [-43.23197364807129, -22.909345140140488]
+    ]);
+    var line2 = turf.lineString([
+        [-43.239097595214844, -22.912309877562752],
+        [-43.23750972747802, -22.911123990374257],
+        [-43.23424816131592, -22.911282109265443],
+        [-43.23248863220215, -22.912744700265876]
+    ]);
+    var overlapping = turf.lineOverlap(line1, line2);
+    // L.geoJSON(line1).addTo(map)
+    // L.geoJSON(line2).addTo(map)
+    // L.geoJSON(overlapping).addTo(map)
+
+    //lineSegment
+    var polygon = turf.polygon([[
+        [-43.23896884918213, -22.908989367292882],
+        [-43.234076499938965, -22.914088688893443],
+        [-43.238582611083984, -22.913851515398072],
+        [-43.233346939086914, -22.909266079588352],
+        [-43.23896884918213, -22.908989367292882]
+    ]]);
+    var segments = turf.lineSegment(polygon);
+    // L.geoJSON(polygon).addTo(map)
+    // L.geoJSON(segments).addTo(map)
+
+    //lineSlice
+    var line = turf.lineString([
+        [-43.24051380157471, -22.91191458298594],
+        [-43.23819637298584, -22.909384670399245],
+        [-43.23592185974121, -22.912467995070728],
+        [-43.23416233062744, -22.91001715297204],
+        [-43.232789039611816, -22.907566266566736]
+    ]);
+    var start = turf.point([-43.23819637298584, -22.909384670399245]);
+    var stopp = turf.point([-43.23489189147949, -22.911163520114343]);
+    var sliced = turf.lineSlice(start, stopp, line);
+    // L.geoJSON(start).addTo(map)
+    // L.geoJSON(stopp).addTo(map)
+    // L.geoJSON(line).addTo(map)
+    // L.geoJSON(sliced).addTo(map)
+
+    //lineSliceAlong
+    var line = turf.lineString([
+        [-43.24051380157471, -22.91191458298594],
+        [-43.23819637298584, -22.909384670399245],
+        [-43.23592185974121, -22.912467995070728],
+        [-43.23416233062744, -22.91001715297204],
+        [-43.232789039611816, -22.907566266566736]
+    ]);
+    var start = 12.5;
+    var stop = 25;
+    var sliced = turf.lineSliceAlong(line, start, stop, {units: 'miles'});
+    // L.geoJSON(start).addTo(map)
+    // L.geoJSON(stopp).addTo(map)
+    // L.geoJSON(line).addTo(map)
+    // L.geoJSON(sliced).addTo(map)
 </script>
