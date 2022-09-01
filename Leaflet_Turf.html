@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Test</title>
+
+        <!-- leaflet css  -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            #map {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .leaflet-popup-content {
+                width: 600px !important;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="map"></div>
+    </body>
+
+</html>
+
+<!-- leaflet js -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+<script src="./data.js"></script>
+<script src="./data_points.js"></script>
+
+<script>
+    // Inicialização do map
+    var map = L.map('map').setView([-22.911077755911283, -43.236133510427784], 15);
+
+    //Criação do mapa do Oen Streat Map - osm layer
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    osm.addTo(map);
+
+    // adicionando o JSON da UERJ no mapa
+    // var uerj = L.geoJSON(data); //JSON simples
+    var uerj = L.geoJSON(data, {
+        onEachFeature: function (feature, layer) {
+            area = (turf.area(feature) / 1000000).toFixed(2)
+            // Coordenadas do centro
+            center_lat = turf.center(feature).geometry.coordinates[1]
+            center_long = turf.center(feature).geometry.coordinates[0]
+            
+            bbox = turf.bbox(feature).toString();
+
+            // console.log(center)
+
+            layer.bindPopup(`<b> Area: </b> ${area} </br> <b>Center:(x, y): </b> (${center_long, center_lat})`)
+        }
+    });
+
+    var uerjPoints = L.geoJSON(data_points); //JSON simples
+    uerj.addTo(map);
+    uerjPoints.addTo(map);
+
+    // Criação da legenda de seleção
+    baseLayer = {
+        'OSM': osm
+    }
+    otherLayers = {
+        'UERJ': uerj,
+        'Points': uerjPoints
+    }
+    L.control.layers(baseLayer, otherLayers, {collapse: false}).addTo(map);
+
+    // Turf - criação de geometrias
+    var point = turf.point([-43.236133510427784, -22.911077755911283]) //o point do turf é INVERTIDO do OSM
+    // L.geoJSON(point).addTo(map)
+
+
+    // Ellipse
+    var center = [-43.236133510427784, -22.911077755911283];
+    var xSemiAxis = 3;
+    var ySemiAxis = 1;
+    var ellipse = turf.ellipse(center, xSemiAxis, ySemiAxis);
+    // L.geoJSON(ellipse).addTo(map)
+
+    //Kinks
+    var poly = turf.polygon([[
+        [-43.23896884918213, -22.908989367292882],
+        [-43.234076499938965, -22.914088688893443],
+        [-43.238582611083984, -22.913851515398072],
+        [-43.233346939086914, -22.909266079588352],
+        [-43.23896884918213, -22.908989367292882]
+    ]]);
+    var kinks = turf.kinks(poly);
+    // L.geoJSON(poly).addTo(map)
+    // L.geoJSON(kinks).addTo(map)
+
+    //lineArc
+    var center = turf.point([-43.23896884918213, -22.908989367292882]);
+    var radius = 5;
+    var bearing1 = 25;
+    var bearing2 = 47;
+    var arc = turf.lineArc(center, radius, bearing1, bearing2);
+    L.geoJSON(center).addTo(map)
+    L.geoJSON(arc).addTo(map)
+</script>
