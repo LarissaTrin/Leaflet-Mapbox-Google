@@ -65,8 +65,8 @@
     });
 
     var uerjPoints = L.geoJSON(data_points); //JSON simples
-     uerj.addTo(map);
-     uerjPoints.addTo(map);
+     //uerj.addTo(map);
+     //uerjPoints.addTo(map);
 
     // Criação da legenda de seleção
     baseLayer = {
@@ -76,7 +76,7 @@
         'UERJ': uerj,
         'Points': uerjPoints
     }
-    L.control.layers(baseLayer, otherLayers, {collapse: false}).addTo(map);
+    //L.control.layers(baseLayer, otherLayers, {collapse: false}).addTo(map);
 
     // Turf - criação de geometrias
     var point = turf.point([-43.236133510427784, -22.911077755911283]) //o point do turf é INVERTIDO do OSM
@@ -175,21 +175,54 @@
         [-43.24051380157471, -22.91191458298594],
         [-43.23819637298584, -22.909384670399245],
         [-43.23592185974121, -22.912467995070728],
-        [-43.23416233062744, -22.91001715297204]
+        [-43.23416233062744, -22.91001715297204],
+        [-43.232789039611816, -22.907566266566736]
     ]);
-    var start = 1;
-    var stopp = 5;
+    var start = 0.3;
+    var stopp = 0.5;
     var sliced = turf.lineSliceAlong(line, start, stopp, {units: 'miles'});
-    // L.geoJSON(line).addTo(map)
-    // L.geoJSON(sliced).addTo(map)
+    L.geoJSON(line).addTo(map)
+    //L.geoJSON(sliced).addTo(map)
 
-    //lineSplit
-    var line = turf.lineString([[120, -25], [145, -25]]);
-    var splitter = turf.lineString([[130, -15], [130, -35]]);
+    //lineSplit --------- não entendemos como funciona
+    var line = turf.lineString([[-43.24188709259033,-22.910768222194754], [-43.2322096824646,-22.911044930859497]]);
+    var splitter = turf.lineString([[-43.236093521118164,-22.907408143341804], [-43.23637247085571,-22.91487926421413]]);
 
     var split = turf.lineSplit(line, splitter);
-    // L.geoJSON(line).addTo(map)
-    // L.geoJSON(sliced).addTo(map)
+    console.log(split)
+    //L.geoJSON(split).addTo(map)
+    //L.geoJSON(splitter).addTo(map)
+    //L.geoJSON(line).addTo(map)
+
+    //mask
+    var polygon = turf.polygon([[[-43.24139356613159, -22.915511721150583], [-43.23053598403931,-22.915511721150583], [ -43.23053598403931,-22.9068349451056], [-43.24139356613159,-22.9068349451056], [-43.24139356613159,-22.915511721150583]]]);
+    var mask = turf.polygon([[
+        [-43.23802471160889, -22.909523026214178],
+        [-43.23738098144531,-22.911459992797592],
+        [-43.23570728302001, -22.91288305265164],
+        [-43.23499917984009, -22.912467995070728],
+        [-43.234076499938965, -22.911479757620093],
+        [-43.23448419570923, -22.910254333176116],
+        [-43.23626518249512, -22.9099380928118 ],
+        [-43.23723077774048, -22.909602086616456],
+        [-43.23802471160889, -22.909523026214178]
+    ]]);
+    var masked = turf.mask(polygon, mask);
+    //L.geoJSON(masked).addTo(map)
+
+
+    //nearestPointOnLine
+    var line = turf.lineString([
+    [-43.23862552642822, -22.9134957543769], 
+    [-43.23774576187134, -22.91161811129688],
+    [-43.23495626449585,-22.911795994388118],
+    [-43.23223114013672,-22.909424200646487],
+    ]);
+    var pt = turf.point([-43.23047161102295, -22.911776229611736]);
+    var snapped = turf.nearestPointOnLine(line, pt, {units: 'miles'});
+    //L.geoJSON(snapped).addTo(map)
+    //L.geoJSON(line).addTo(map)
+    //L.geoJSON(pt).addTo(map)
 
     //sector
     var center = turf.point([-43.236133510427784, -22.911077755911283]);
@@ -199,8 +232,6 @@
     var sector = turf.sector(center, radius, bearing1, bearing2);
     //L.geoJSON(sector).addTo(map)
 
-
-    
     //shortestPath
     var start = [-43.24197292327881, -22.91151928725644];
     var end = [-43.23158740997314, -22.91191458298594];
