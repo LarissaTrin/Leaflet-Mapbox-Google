@@ -170,19 +170,24 @@
     // L.geoJSON(line).addTo(map)
     // L.geoJSON(sliced).addTo(map)
 
-    //lineSliceAlong
+    //lineSliceAlong   ------ Não FUNCIONAL
     var line = turf.lineString([
         [-43.24051380157471, -22.91191458298594],
         [-43.23819637298584, -22.909384670399245],
         [-43.23592185974121, -22.912467995070728],
-        [-43.23416233062744, -22.91001715297204],
-        [-43.232789039611816, -22.907566266566736]
+        [-43.23416233062744, -22.91001715297204]
     ]);
-    var start = 12.5;
-    var stop = 25;
-    var sliced = turf.lineSliceAlong(line, start, stop, {units: 'miles'});
-    // L.geoJSON(start).addTo(map)
-    // L.geoJSON(stopp).addTo(map)
+    var start = 1;
+    var stopp = 5;
+    var sliced = turf.lineSliceAlong(line, start, stopp, {units: 'miles'});
+    // L.geoJSON(line).addTo(map)
+    // L.geoJSON(sliced).addTo(map)
+
+    //lineSplit
+    var line = turf.lineString([[120, -25], [145, -25]]);
+    var splitter = turf.lineString([[130, -15], [130, -35]]);
+
+    var split = turf.lineSplit(line, splitter);
     // L.geoJSON(line).addTo(map)
     // L.geoJSON(sliced).addTo(map)
 </script>
