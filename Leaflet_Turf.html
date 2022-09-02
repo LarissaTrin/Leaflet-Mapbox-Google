@@ -65,8 +65,8 @@
     });
 
     var uerjPoints = L.geoJSON(data_points); //JSON simples
-    // uerj.addTo(map);
-    // uerjPoints.addTo(map);
+     uerj.addTo(map);
+     uerjPoints.addTo(map);
 
     // Criação da legenda de seleção
     baseLayer = {
@@ -190,4 +190,57 @@
     var split = turf.lineSplit(line, splitter);
     // L.geoJSON(line).addTo(map)
     // L.geoJSON(sliced).addTo(map)
+
+    //sector
+    var center = turf.point([-43.236133510427784, -22.911077755911283]);
+    var radius = 5;
+    var bearing1 = 25;
+    var bearing2 = 45;
+    var sector = turf.sector(center, radius, bearing1, bearing2);
+    //L.geoJSON(sector).addTo(map)
+
+
+    
+    //shortestPath
+    var start = [-43.24197292327881, -22.91151928725644];
+    var end = [-43.23158740997314, -22.91191458298594];
+    var options = {
+        obstacles: turf.polygon([[[-43.23763847351074,-22.913456225316907], [-43.2337760925293,-22.913456225316907], [-43.2337760925293,-22.909740442209518], [-43.23763847351074,-22.909740442209518], [-43.23763847351074,-22.913456225316907]]])
+    };
+    var obstac = turf.polygon([[[-43.23763847351074,-22.913456225316907], [-43.2337760925293,-22.913456225316907], [-43.2337760925293,-22.909740442209518], [-43.23763847351074,-22.909740442209518], [-43.23763847351074,-22.913456225316907]]]);
+
+    var path = turf.shortestPath(start, end, options);
+    //L.geoJSON(path).addTo(map)
+    //L.geoJSON(obstac).addTo(map)
+
+    //unkinkPolygon 
+    var poly = turf.polygon([[[-43.2320, -22.9120], [-43.2358, -22.9120], [-43.2366, -22.9102], [-43.2358, -22.9108], [-43.2320, -22.9120]]]);
+    var result = turf.unkinkPolygon(poly);
+    //L.geoJSON(result).addTo(map)
+
+    //randomPosition
+    var position = turf.randomPosition([-43.2140, -22.9110, -43.2380, -22.9620])
+    var point = turf.point(position);
+    console.log(position)
+    //L.geoJSON(position).addTo(map)
+    //L.geoJSON(point).addTo(map)
+
+    //random points
+    var points = turf.randomPoint(5, {bbox: [-43.2140, -22.9110, -43.2380, -22.9620]})
+    //L.geoJSON(points).addTo(map)
+
+    //radom lineStrings
+    var lineStrings = turf.randomLineString(500, {bbox: [-43.2140, -22.9110, -43.2380, -22.9620]})
+    //L.geoJSON(lineStrings).addTo(map)
+
+    //radom polygons
+    var polygons = turf.randomPolygon(1, {bbox: [-43.2140, -22.9110, -43.2380, -22.9620]})
+    //L.geoJSON(polygons).addTo(map)
+
+    // Sample
+    var points = turf.randomPoint(500, {bbox: [-43.2140, -22.9110, -43.2380, -22.9620]});
+    //L.geoJSON(points).addTo(map)
+    var sample = turf.sample(points, 10);
+    //L.geoJSON(sample).addTo(map)
+
 </script>
